@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:infra="clr-namespace:WhereAreMyBusDriver.Infrastructure;assembly=WhereAreMyBusDriver" 
+             x:Class="WhereAreMyBusDriver.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <!-- Locator -->
+            <infra:InstanceLocator x:Key="Locator">
+            </infra:InstanceLocator>
+            <!--Colors-->
+            <Color x:Key="MainColor">#26A96B</Color>
+            <Color x:Key="FontColor">#000000</Color>
+            <Color x:Key="FontColor2">#019C54</Color>
+            <Color x:Key="AccentColor1">#F6E146</Color>
+            <Color x:Key="AccentColor2">#eaeaea</Color>
+            <Color x:Key="BackgroundColor">#FFFFFF</Color>
+            <Color x:Key="LoginColor2">#7DCCA6</Color>
+            <!--Menu Colors-->
+            <Color x:Key="MenuColor">#FFD200</Color>
+            <Color x:Key="MenuFontColor">#ECF0F1</Color>
+            <!-- Parameters -->
+            <x:String x:Key="URLAPI">https://wherearemybus-1503502678166.firebaseio.com</x:String>
+            <x:String x:Key="URLAPIAUTH">https://www.googleapis.com</x:String>
+            <x:String x:Key="APIKEY">AIzaSyCYrGPLvjiD_ZnZ9ynoChlOFDaEBat-CYI</x:String>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

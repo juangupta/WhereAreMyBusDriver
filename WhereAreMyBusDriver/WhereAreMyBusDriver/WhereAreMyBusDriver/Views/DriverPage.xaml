@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WhereAreMyBusDriver.Views.DriverPage"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:control="clr-namespace:WhereAreMyBusDriver.Controls"
+             Title="Mi Viaje"
+             BackgroundColor="{StaticResource BackgroundColor}"             
+             BindingContext="{Binding Main, Source={StaticResource Locator}}">
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout
+                HorizontalOptions="StartAndExpand"
+                VerticalOptions="Center"
+                Padding="8">
+            <Label
+                    HorizontalOptions="StartAndExpand"
+                    VerticalOptions="Center"    
+                    FontSize="Medium"
+                    FontAttributes="Bold"
+                    TextColor="{StaticResource FontColor2}"
+                    Text="{Binding Driver.Nombre}">
+            </Label>
+            <Label
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                    FontSize="Small"
+                    TextColor="{StaticResource FontColor}"
+                    Text="{Binding Driver.Placa, StringFormat='Placa: {0}'}}">
+            </Label>
+            <Label
+                    HorizontalOptions="StartAndExpand"
+                    VerticalOptions="Center"
+                    FontSize="Small"
+                    TextColor="{StaticResource FontColor}"
+                    Text="{Binding Driver.Vehiculo, StringFormat='Vehiculo: {0}'}}">
+            </Label>
+        </StackLayout>
+            <StackLayout
+                AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                AbsoluteLayout.LayoutFlags="All"
+                HorizontalOptions ="CenterAndExpand"
+                BindingContext="{Binding myDriver}">
+                <maps:Map
+                    WidthRequest="320"
+                    HeightRequest="280"
+                    x:Name="MyMap"
+                    IsShowingUser="true"
+                    MapType="Street">
+                </maps:Map>
+                <control:BindablePicker
+                    HeightRequest="40"
+                    Title="Seleccione la ruta..."
+                    DisplayMemberPath="Ruta"
+                    SelectedValuePath="Ruta"
+                    TextColor="{StaticResource FontColor}"
+                    BackgroundColor="{StaticResource BackgroundColor}"
+                    ItemsSource="{Binding Rutas}"
+                    SelectedValue="{Binding Path=MyRoute , Mode=TwoWay}"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="Center">
+                </control:BindablePicker>
+                <StackLayout 
+                    Orientation="Horizontal">
+                    <Button
+                        AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                        AbsoluteLayout.LayoutFlags="All"
+                        Command="{Binding StartCommand}"
+                        IsEnabled="{Binding IsEnabledStart}"
+                        VerticalOptions="End"
+                        HorizontalOptions="FillAndExpand"
+                        BackgroundColor="{StaticResource BackgroundColor}"
+                        TextColor="{StaticResource MainColor}"
+                        HeightRequest="40"
+                        BorderRadius="20"
+                        Text="Iniciar viaje">
+                    </Button>
+                    <Button
+                        AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                        AbsoluteLayout.LayoutFlags="All"
+                        Command="{Binding EndCommand}"
+                        IsEnabled="{Binding IsEnabledEnd}"
+                        VerticalOptions="End"
+                        HorizontalOptions="FillAndExpand"
+                        BackgroundColor="{StaticResource BackgroundColor}"
+                        TextColor="{StaticResource MainColor}"
+                        HeightRequest="40"
+                        BorderRadius="20"
+                        Text="Finalizar viaje">
+                    </Button>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+      <ContentPage.ToolbarItems>
+    <ToolbarItem
+        Icon="ic_launcher.png"/>
+  </ContentPage.ToolbarItems>
+</ContentPage>

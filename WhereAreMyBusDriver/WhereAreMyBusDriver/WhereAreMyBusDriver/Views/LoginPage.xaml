@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WhereAreMyBusDriver.Views.LoginPage"
+             Title="Mi Cootransda"
+             BackgroundColor="{StaticResource MainColor}"
+             BindingContext="{Binding Main, Source={StaticResource Locator}}"
+             >
+    <ContentPage.Content>
+        <ScrollView
+            BindingContext="{Binding Login}"
+            VerticalOptions="Center">            
+            <StackLayout
+            Spacing="5"
+            Padding="8">
+                <Image
+                Source="ic_launcher2.png"
+                    HeightRequest="160"
+                    WidthRequest="160">
+                </Image>
+                <Grid
+                Padding="30,0,30,0">
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label
+                        Grid.Column="0"
+                        Text="Email"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        TextColor="{StaticResource AccentColor1}">
+                        </Label>
+                        <Entry
+                        Grid.Column="1"
+                        Text="{Binding Email}"
+                        Placeholder="Ingrese su email..."
+                        Keyboard="Email"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="Center"
+                        TextColor="{StaticResource BackgroundColor}">
+                        </Entry>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Label
+                        Grid.Column="0"
+                        Text="Contraseña"
+                        FontAttributes="Bold"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        TextColor="{StaticResource AccentColor1}">
+                        </Label>
+                        <Entry
+                        Grid.Column="1"
+                        Text="{Binding Contraseña}"
+                        Placeholder="Ingrese su contraseña..."
+                        IsPassword="True"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="Center"
+                        TextColor="{StaticResource BackgroundColor}">
+                        </Entry>
+                    </Grid>
+                </Grid>
+                <StackLayout
+                Padding="30,0,30,0"
+                Orientation="Horizontal">
+                    <Switch
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                    IsToggled="{Binding IsRemembered}">
+                    </Switch>
+                    <Label
+                    Text="Recordarme"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center"
+                    TextColor="{StaticResource BackgroundColor}">
+                    </Label>
+                </StackLayout>
+                <ActivityIndicator
+                IsRunning="{Binding IsRunning}"
+                    Color="{StaticResource BackgroundColor}">
+                </ActivityIndicator>
+                <StackLayout
+                Padding="30,0,30,0"
+                Orientation="Vertical">
+                    <Button
+                    Command="{Binding LoginCommand}"
+                    IsEnabled="{Binding IsEnabled}"
+                    VerticalOptions="Center"
+                    HorizontalOptions="FillAndExpand"
+                    BackgroundColor="{StaticResource BackgroundColor}"
+                    TextColor="{StaticResource MainColor}"
+                    Text="Login">
+                    </Button>
+                    <Label
+                    Text="Olvidó su contraseña?"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    TextColor="{StaticResource LoginColor2}">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ForgotPasswordCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
