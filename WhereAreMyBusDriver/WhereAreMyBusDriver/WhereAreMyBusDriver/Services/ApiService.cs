@@ -113,11 +113,9 @@
                 }
 
                 var result = await response.Content.ReadAsStringAsync();
-                //var model = JsonConvert.DeserializeObject<T>(result);
+                //var model1 = JsonConvert.DeserializeObject<dynamic>(result);
                 dynamic data = JObject.Parse((string)result);
-                //var model = JsonConvert.DeserializeObject<T>(((JProperty)data).Value.ToString());
-                JObject parsedJson = JObject.Parse(result);
-                var key = parsedJson.First.Children().ToString();
+                var key = ((IDictionary<string, JToken>)data).First().Key.ToString();
                 var model = ((IDictionary<string, JToken>)data).Select(k =>
                 JsonConvert.DeserializeObject<T>(k.Value.ToString())).First();
                 //dynamic data = JObject.Parse((string)result);
@@ -226,15 +224,13 @@
             }
         }
 
-        public async Task<Response> Delete<T>(string urlBase, string servicePrefix, string controller,
-            string tokenType, string accessToken, T model)
+        public async Task<Response> Delete(string urlBase, string servicePrefix, string accessToken, string key)
         {
             try
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri(urlBase);
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(tokenType, accessToken);
-                var url = string.Format("{0}{1}/{2}", servicePrefix, controller, model.GetHashCode());
+                var url = string.Format("{0}/{1}.json?auth={2}", servicePrefix, key, accessToken);
                 var response = await client.DeleteAsync(url);
 
                 if (!response.IsSuccessStatusCode)

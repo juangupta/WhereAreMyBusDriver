@@ -6,9 +6,9 @@
         [JsonProperty(PropertyName = "placa")]
         public string Placa { get; set; }
         [JsonProperty(PropertyName = "latitud")]
-        public float Latitud { get; set; }
+        public double Latitud { get; set; }
         [JsonProperty(PropertyName = "longitud")]
-        public float Longitud { get; set; }
+        public double Longitud { get; set; }
         [JsonProperty(PropertyName = "vehiculo")]
         public string Vehiculo { get; set; }
         [JsonProperty(PropertyName = "ruta")]

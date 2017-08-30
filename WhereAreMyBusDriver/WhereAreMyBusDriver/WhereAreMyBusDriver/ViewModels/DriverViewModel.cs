@@ -20,6 +20,7 @@ namespace WhereAreMyBusDriver.ViewModels
         private DialogService dialogService;
         private bool isEnabledStart;
         private bool isEnabledEnd;
+        GeolocatorService geolocatorService;
         #endregion
 
         #region Properties
@@ -66,6 +67,7 @@ namespace WhereAreMyBusDriver.ViewModels
             apiService = new ApiService();
             dialogService = new DialogService();
             Rutas = new ObservableCollection<Route>();
+            geolocatorService = new GeolocatorService();
             IsEnabledStart = true;
             IsEnabledEnd = false;
             GetRutas();
@@ -85,7 +87,7 @@ namespace WhereAreMyBusDriver.ViewModels
                 await dialogService.ShowMessage("Error", "Seleccione una ruta.");
                 return;
             }
-            IsEnabledStart = false;
+            //IsEnabledStart = false;
             var mainViewModel = MainViewModel.GetInstance();
             //var checkConnection = await apiService.CheckConnection();
             //if (!checkConnection.IsSuccess)
@@ -106,12 +108,43 @@ namespace WhereAreMyBusDriver.ViewModels
 
             if (response.IsSuccess)
             {
-                IsEnabledStart = true;
-                await dialogService.ShowMessage("Error", "Problemas registrando el viaje.");
+                //IsEnabledStart = true;
+                //await dialogService.ShowMessage("Error", "Problemas registrando el viaje.");
+                var responseDelete = await apiService.Delete(
+                urlAPI,
+                "/locations",
+                mainViewModel.Driver.Token,
+                response.Extra);
 
             }
 
-            var location = (Location)response.Result;
+            await geolocatorService.GetLocation();
+            var newLocation = new Location
+            {
+                Placa = mainViewModel.Driver.Placa,
+                Vehiculo = mainViewModel.Driver.Vehiculo,
+                Ruta = MyRoute,
+                Latitud = geolocatorService.Latitude,
+                Longitud = geolocatorService.Longitude
+
+            };
+
+            var responsePost = await apiService.Post<Location>(
+                urlAPI,
+                "/locations",
+                ".json",
+                newLocation,
+                mainViewModel.Driver.Token);
+
+            if (!responsePost.IsSuccess)
+            {
+                IsEnabledStart = true;
+                await dialogService.ShowMessage("Error", "No se ha podido iniciar el viaje");
+                return;
+               
+
+            }
+
         }
 
         public ICommand EndCommand
