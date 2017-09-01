@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -7,7 +8,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WhereAreMyBusDriver.Models;
 using WhereAreMyBusDriver.Services;
+using WhereAreMyBusDriver.Views;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 
 namespace WhereAreMyBusDriver.ViewModels
 {
@@ -72,7 +75,6 @@ namespace WhereAreMyBusDriver.ViewModels
             dialogService = new DialogService();
             Rutas = new ObservableCollection<Route>();
             geolocatorService = new GeolocatorService();
-            CancellationToken = new CancellationTokenSource();
             IsEnabledStart = true;
             IsEnabledEnd = false;
             GetRutas();
@@ -130,7 +132,8 @@ namespace WhereAreMyBusDriver.ViewModels
                 Vehiculo = mainViewModel.Driver.Vehiculo,
                 Ruta = MyRoute,
                 Latitud = geolocatorService.Latitude,
-                Longitud = geolocatorService.Longitude
+                Longitud = geolocatorService.Longitude,
+                Hora = DateTime.Today.ToString()
 
             };
 
@@ -248,7 +251,8 @@ namespace WhereAreMyBusDriver.ViewModels
                     Latitud = (float)geolocatorService.Latitude,
                     Longitud = (float)geolocatorService.Longitude,
                     Ruta = MyRoute,
-                    Placa = mainViewModel.Driver.Placa
+                    Placa = mainViewModel.Driver.Placa,
+                    Hora = DateTime.Today.ToString()
                 };
                 //var urlAPI = Application.Current.Resources["URLAPI"].ToString();
                 var urlAPI = Application.Current.Resources["URLAPI"].ToString();
@@ -258,7 +262,7 @@ namespace WhereAreMyBusDriver.ViewModels
                     key + ".json", 
                     location,
                     mainViewModel.Driver.Token);
-
+                
             }
 
         }

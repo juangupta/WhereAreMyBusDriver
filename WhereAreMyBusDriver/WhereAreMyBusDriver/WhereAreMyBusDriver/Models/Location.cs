@@ -13,6 +13,8 @@
         public string Vehiculo { get; set; }
         [JsonProperty(PropertyName = "ruta")]
         public string Ruta { get; set; }
+        [JsonProperty(PropertyName = "hora")]
+        public string Hora { get; set; }
 
     }
 

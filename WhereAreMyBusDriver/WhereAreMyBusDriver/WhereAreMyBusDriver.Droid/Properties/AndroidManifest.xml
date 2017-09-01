@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" android:versionCode="1" android:versionName="1.0">
 	<uses-sdk android:minSdkVersion="10" android:targetSdkVersion="23" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -8,7 +8,7 @@
 	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-	<application android:label="WhereAreMyBusDriver.Droid">
+	<application android:label="WhereAreMyBusDriver.Droid" android:icon="@drawable/logoDriver2">
 		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDnz1WEXhEbrcZsFF6-yj-DTm9Ruc8xX0E" />
 	</application>
 </manifest>
