@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using WhereAreMyBusDriver.Models;
 using WhereAreMyBusDriver.Services;
@@ -21,11 +23,13 @@ namespace WhereAreMyBusDriver.ViewModels
         private bool isEnabledStart;
         private bool isEnabledEnd;
         GeolocatorService geolocatorService;
+        string key;
         #endregion
 
         #region Properties
         public ObservableCollection<Route> Rutas { get;set;}
         public string MyRoute { get; set; }
+        public static CancellationTokenSource CancellationToken { get; set; }
         public bool IsEnabledStart
         {
             set
@@ -68,6 +72,7 @@ namespace WhereAreMyBusDriver.ViewModels
             dialogService = new DialogService();
             Rutas = new ObservableCollection<Route>();
             geolocatorService = new GeolocatorService();
+            CancellationToken = new CancellationTokenSource();
             IsEnabledStart = true;
             IsEnabledEnd = false;
             GetRutas();
@@ -144,6 +149,12 @@ namespace WhereAreMyBusDriver.ViewModels
                
 
             }
+            var postResponse = (PostResponse)responsePost.Result;
+            key = postResponse.Name;
+            IsEnabledEnd = true;
+            IsEnabledStart = false;
+
+            Task.Run(async () => backgroundThread());
 
         }
 
@@ -154,7 +165,16 @@ namespace WhereAreMyBusDriver.ViewModels
 
         private async void End()
         {
-
+            IsEnabledEnd = false;
+            IsEnabledStart = true;
+            CancellationToken.Cancel();
+            var urlAPI = Application.Current.Resources["URLAPI"].ToString();
+            var mainViewModel = MainViewModel.GetInstance();
+            var responseDelete = await apiService.Delete(
+                urlAPI,
+                "/locations",
+                mainViewModel.Driver.Token,
+                key);
         }
         #endregion
 
@@ -196,6 +216,53 @@ namespace WhereAreMyBusDriver.ViewModels
 
             }
         }
+
+        async Task backgroundThread()
+        {
+            CancellationToken = new CancellationTokenSource();
+            while (!CancellationToken.IsCancellationRequested)
+            {
+
+                CancellationToken.Token.ThrowIfCancellationRequested();
+                await Task.Delay(1000, CancellationToken.Token).ContinueWith(async (arg) => {
+                    if (!CancellationToken.Token.IsCancellationRequested)
+                    {
+                        CancellationToken.Token.ThrowIfCancellationRequested();
+                        await trackLocation();
+                    }
+                });
+
+            }
+        }
+
+        async Task trackLocation()
+        {
+
+            var mainViewModel = MainViewModel.GetInstance();
+            await geolocatorService.GetLocation();
+            if (geolocatorService.Latitude != 0 && geolocatorService.Longitude != 0)
+            {
+                var location = new Location
+                {
+                    Vehiculo = mainViewModel.Driver.Vehiculo,
+                    Latitud = (float)geolocatorService.Latitude,
+                    Longitud = (float)geolocatorService.Longitude,
+                    Ruta = MyRoute,
+                    Placa = mainViewModel.Driver.Placa
+                };
+                //var urlAPI = Application.Current.Resources["URLAPI"].ToString();
+                var urlAPI = Application.Current.Resources["URLAPI"].ToString();
+                var response = await apiService.Put<Location>(
+                    urlAPI,
+                    "/locations",
+                    key + ".json", 
+                    location,
+                    mainViewModel.Driver.Token);
+
+            }
+
+        }
+
         #endregion
 
     }

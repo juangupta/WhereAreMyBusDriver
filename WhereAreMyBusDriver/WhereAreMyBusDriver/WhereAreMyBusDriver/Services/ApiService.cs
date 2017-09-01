@@ -183,7 +183,7 @@
             }
         }
 
-        public async Task<Response> Put<T>(string urlBase, string servicePrefix, string controller,  T model)
+        public async Task<Response> Put<T>(string urlBase, string servicePrefix, string controller,  T model, string accessToken)
         {
             try
             {
@@ -192,7 +192,7 @@
                 var client = new HttpClient();
                 //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(tokenType, accessToken);
                 client.BaseAddress = new Uri(urlBase);
-                var url = string.Format("{0}{1}", servicePrefix, controller);
+                var url = string.Format("{0}{1}?auth={2}", servicePrefix, controller, accessToken);
                 var response = await client.PutAsync(url, content);
 
                 if (!response.IsSuccessStatusCode)

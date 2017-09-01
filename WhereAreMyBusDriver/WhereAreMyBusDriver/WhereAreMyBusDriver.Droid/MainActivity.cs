@@ -9,7 +9,7 @@ using Android.OS;
 
 namespace WhereAreMyBusDriver.Droid
 {
-    [Activity(Label = "Conductor Cootransda", Icon = "@drawable/logoDriver", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Cootransda Conductor", Icon = "@drawable/logoDriver2", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
