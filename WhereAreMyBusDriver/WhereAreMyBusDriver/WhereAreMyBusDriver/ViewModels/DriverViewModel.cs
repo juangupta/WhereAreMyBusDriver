@@ -26,7 +26,7 @@ namespace WhereAreMyBusDriver.ViewModels
         private bool isEnabledStart;
         private bool isEnabledEnd;
         GeolocatorService geolocatorService;
-        string key;
+        public string key;
         #endregion
 
         #region Properties
@@ -95,7 +95,6 @@ namespace WhereAreMyBusDriver.ViewModels
                 return;
             }
             //IsEnabledStart = false;
-            var mainViewModel = MainViewModel.GetInstance();
             //var checkConnection = await apiService.CheckConnection();
             //if (!checkConnection.IsSuccess)
             //{
@@ -105,6 +104,7 @@ namespace WhereAreMyBusDriver.ViewModels
 
             //}
 
+            var mainViewModel = MainViewModel.GetInstance();
             var urlAPI = Application.Current.Resources["URLAPI"].ToString();
             var response = await apiService.GetByField<Location>(
                 urlAPI,
@@ -133,7 +133,7 @@ namespace WhereAreMyBusDriver.ViewModels
                 Ruta = MyRoute,
                 Latitud = geolocatorService.Latitude,
                 Longitud = geolocatorService.Longitude,
-                Hora = DateTime.Today.ToString()
+                Hora = DateTime.Now.ToLocalTime().ToString()
 
             };
 
@@ -157,7 +157,8 @@ namespace WhereAreMyBusDriver.ViewModels
             IsEnabledEnd = true;
             IsEnabledStart = false;
 
-            Task.Run(async () => backgroundThread());
+            Task.Factory.StartNew(() => backgroundThread(), TaskCreationOptions.LongRunning);
+            //Task.Run(async () => backgroundThread());
 
         }
 
@@ -171,6 +172,7 @@ namespace WhereAreMyBusDriver.ViewModels
             IsEnabledEnd = false;
             IsEnabledStart = true;
             CancellationToken.Cancel();
+            await Task.Delay(2000);
             var urlAPI = Application.Current.Resources["URLAPI"].ToString();
             var mainViewModel = MainViewModel.GetInstance();
             var responseDelete = await apiService.Delete(
@@ -227,7 +229,7 @@ namespace WhereAreMyBusDriver.ViewModels
             {
 
                 CancellationToken.Token.ThrowIfCancellationRequested();
-                await Task.Delay(1000, CancellationToken.Token).ContinueWith(async (arg) => {
+                await Task.Delay(500, CancellationToken.Token).ContinueWith(async (arg) => {
                     if (!CancellationToken.Token.IsCancellationRequested)
                     {
                         CancellationToken.Token.ThrowIfCancellationRequested();
@@ -252,13 +254,13 @@ namespace WhereAreMyBusDriver.ViewModels
                     Longitud = (float)geolocatorService.Longitude,
                     Ruta = MyRoute,
                     Placa = mainViewModel.Driver.Placa,
-                    Hora = DateTime.Today.ToString()
+                    Hora = DateTime.Now.ToLocalTime().ToString()
                 };
                 //var urlAPI = Application.Current.Resources["URLAPI"].ToString();
                 var urlAPI = Application.Current.Resources["URLAPI"].ToString();
                 var response = await apiService.Put<Location>(
                     urlAPI,
-                    "/locations",
+                    "/locations/",
                     key + ".json", 
                     location,
                     mainViewModel.Driver.Token);
